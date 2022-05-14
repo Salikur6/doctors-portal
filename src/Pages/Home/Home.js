@@ -5,7 +5,7 @@ import Services from './Services/Services';
 import AppointmentBanner from './AppointmentBanner/AppointmentBanner';
 import Testimonial from './Testimonial/Testimonial';
 import Contact from './Contact/Contact';
-import Footer from './Footer/Footer';
+import Footer from '../Shared/Footer';
 const Home = () => {
     return (
         <div>

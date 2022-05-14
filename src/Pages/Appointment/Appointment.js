@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Footer from '../Shared/Footer';
+import AppointmentPageBanner from './AppointmentPageBanner';
+import AvailableAppointment from './AvailableAppointment';
 
 const Appointment = () => {
+
+    const [date, setDate] = useState(new Date());
+
+
     return (
-        <div>
-            <h2>This is Appointment Page</h2>
+        <div className='container mx-auto'>
+            <AppointmentPageBanner date={date} setDate={setDate}></AppointmentPageBanner>
+            <AvailableAppointment date={date}></AvailableAppointment>
+            <Footer></Footer>
         </div>
     );
 };
