@@ -4,9 +4,9 @@ import bgAppointment from '../../../assets/images/appointment.png';
 
 const AppointmentBanner = () => {
     return (
-        <div className="hero  absolute" style={{ backgroundImage: `url(${bgAppointment})` }}>
+        <section className="hero" style={{ backgroundImage: `url(${bgAppointment})`, marginBottom: '100px' }}>
             <div className="hero-content flex-col lg:flex-row p-5">
-                <img src={doctor} className="w-1/2 rounded-lg relative mt-[-145px] mb-[-16px] hidden lg:block" alt='doctor img' />
+                <img src={doctor} className="w-1/2 rounded-lg mt-[-145px] mb-[-20px] hidden lg:block" alt='doctor img' />
                 <div className='text-white py-8'>
                     <h4 className='text-xl font-bold text-primary mb-4'>Appointment</h4>
                     <h1 className="lg:text-4xl text-3xl font-bold">Make an appointment Today</h1>
@@ -14,7 +14,7 @@ const AppointmentBanner = () => {
                     <button className="btn bg-gradient-to-r from-secondary to-primary text-white border-0 font-bold">Get Started</button>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 
