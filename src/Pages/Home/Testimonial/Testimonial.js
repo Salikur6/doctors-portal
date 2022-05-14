@@ -17,14 +17,14 @@ const Testimonial = () => {
             _id: 2,
             description: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
             img: people2,
-            name: 'Winson Herry',
+            name: 'John b.',
             address: 'Cailfornia'
         },
         {
             _id: 3,
             description: 'It is a long established fact that by the readable content of a lot layout. The point of using Lorem a more-or-less normal distribu to using Content here, content',
             img: people3,
-            name: 'Winson Herry',
+            name: 'Sanju Samuel',
             address: 'Cailfornia'
         },
     ]
@@ -51,7 +51,12 @@ const Testimonial = () => {
                                 <p className='my-9 mx-2'>{review.description}</p>
                                 <div className='flex items-center'>
                                     <div className='mr-3'>
-                                        <img src={review.img} alt="Shoes" />
+
+                                        <div class="avatar">
+                                            <div class="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                                <img src={review.img} alt='Reviewer img' />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <h5 className='text-xl font-bold'>{review.name}</h5>
