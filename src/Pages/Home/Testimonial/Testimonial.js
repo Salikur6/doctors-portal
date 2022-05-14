@@ -52,8 +52,8 @@ const Testimonial = () => {
                                 <div className='flex items-center'>
                                     <div className='mr-3'>
 
-                                        <div class="avatar">
-                                            <div class="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                        <div className="avatar">
+                                            <div className="w-20 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                                                 <img src={review.img} alt='Reviewer img' />
                                             </div>
                                         </div>
