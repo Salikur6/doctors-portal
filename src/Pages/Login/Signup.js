@@ -1,29 +1,55 @@
 import React, { useState } from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading'
 
-const Login = () => {
+const Signup = () => {
+    const [user] = useAuthState(auth)
+    const navigate = useNavigate()
+    console.log(user)
+
     const [signInWithGoogle, googleUser, GoogleLoading, GoogleError] = useSignInWithGoogle(auth);
 
     const [
-        signInWithEmailAndPassword,
-        loginUser,
-        loginLoading,
-        loginError,
-    ] = useSignInWithEmailAndPassword(auth);
+        createUserWithEmailAndPassword,
+        createUser,
+        createLoading,
+        createError,
+    ] = useCreateUserWithEmailAndPassword(auth);
+
+
+    const [
+        updateProfile,
+        profileUpdating,
+        profileError
+    ] = useUpdateProfile(auth);
 
 
     const [userInfo, setUserInfo] = useState({
+        name: '',
         email: '',
         password: ''
     });
     const [error, setError] = useState({
+        name: '',
         email: '',
         password: '',
         other: ''
     });
+
+    const handleNameChange = (e) => {
+        const fullNameRegex = /(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})/;
+        const validName = fullNameRegex.test(e.target.value);
+
+        if (validName) {
+            setUserInfo({ ...userInfo, name: e.target.value });
+            setError({ ...error, name: '' });
+        } else {
+            setError({ ...error, name: 'Enter A Valid Name' });
+            setUserInfo({ ...userInfo, name: '' });
+        }
+    }
 
     const handleEmailChange = (e) => {
         const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -53,35 +79,46 @@ const Login = () => {
     }
 
 
-    const location = useLocation();
-    const navigate = useNavigate();
 
-    let from = location.state?.from?.pathname || "/";
 
-    if (loginUser || googleUser) {
-        navigate(from, { replace: true });
-    }
 
     // console.log(userInfo)
-    const handleSubmit = event => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const email = userInfo.email;
         const password = userInfo.password;
+        const name = userInfo.name;
 
-        signInWithEmailAndPassword(email, password);
+        await createUserWithEmailAndPassword(email, password);
+        await updateProfile({ displayName: name });
+        // console.log('update done')
+
+        navigate('/appointment')
     }
 
 
-    if (GoogleLoading || loginLoading) {
+    if (GoogleLoading || createLoading || profileUpdating) {
         return <Loading></Loading>
     }
+
 
     return (
         <div>
             <div className='container mx-auto '>
                 <div className="hero card min-h-screen">
                     <div className="card sm:w-96 w-80 bg-base-100 shadow-xl">
+                        <h2 className='text-center text-2xl font-bold'>SignUp</h2>
                         <form onSubmit={handleSubmit} className="card-body mr-3">
+
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-bold">Full Name</span>
+                                </label>
+                                <input type="text" placeholder="Full Name" className="input input-bordered font-bold" onChange={handleNameChange} required />
+                            </div>
+                            <p className='text-red-600 font-bold'>{error && error?.name}</p>
+                            <p>{profileError && profileError?.message}</p>
+
 
                             <div className="form-control">
                                 <label className="label">
@@ -102,31 +139,31 @@ const Login = () => {
                             </div>
 
 
-                            <p className='text-red-600 font-bold'>{loginError && loginError.message}</p>
+                            <p className='text-red-600 font-bold'>{createError && createError?.message}</p>
                             <p className='text-red-600 font-bold'>{error && error.password}</p>
-                            {loginLoading && <Loading></Loading>}
+                            {createLoading && <Loading></Loading>}
 
 
 
 
                             <div className="form-control mt-6">
-                                <button className="btn btn-primary font-bold bg-gradient-to-r from-secondary to-primary text-white">Login</button>
+                                <button className="btn btn-primary font-bold bg-gradient-to-r from-secondary to-primary text-white">SignUp</button>
                             </div>
 
                         </form>
-                        <p className='text-center'>New to Doctors Portal? <Link className='text-primary' to='/signup'>Create New Account</Link></p>
+                        <p className='text-center'>Already have an account? <Link className='text-primary' to='/login'>Please login</Link></p>
 
                         <div className="divider my-5 
-                        
-                        font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary
-                        ">OR</div>
+                    
+                    font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-primary
+                    ">OR</div>
                         <div className='card-body'>
 
 
                             {GoogleLoading && <Loading></Loading>}
 
 
-                            {GoogleError && <p className='text-red-700 font-bold'>{GoogleError.message}</p>}
+                            {GoogleError && <p className='text-red-700 font-bold'>{GoogleError?.message}</p>}
 
 
                             <button className="btn h-10 px-5 m-2 transition-colors duration-150 bg-white  text-red-700 rounded-lg focus:shadow-outline hover:bg-red-700 hove:text-white btn-outline font-bold uppercase border-2" onClick={() => signInWithGoogle()}>continue with google</button>
@@ -141,4 +178,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;
