@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
@@ -16,7 +16,7 @@ const Signup = () => {
         createUser,
         createLoading,
         createError,
-    ] = useCreateUserWithEmailAndPassword(auth);
+    ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
 
 
     const [
@@ -93,8 +93,13 @@ const Signup = () => {
         await updateProfile({ displayName: name });
         // console.log('update done')
 
-        navigate('/appointment')
     }
+
+    useEffect(() => {
+        if (createUser || googleUser) {
+            navigate('/appointment')
+        }
+    }, [createUser, googleUser, navigate])
 
 
     if (GoogleLoading || createLoading || profileUpdating) {
