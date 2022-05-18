@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import React, { useEffect, useState } from 'react';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading'
 
@@ -52,15 +53,40 @@ const Login = () => {
         }
     }
 
+    const [sendPasswordResetEmail, resetSending, resetError] = useSendPasswordResetEmail(
+        auth
+    );
+
+    const handlePasswordResetClick = async () => {
+
+        if (!resetError?.message) {
+            return toast.warning('Enter a valid email');
+        }
+        if (userInfo.email) {
+            await sendPasswordResetEmail(userInfo.email);
+            toast.success('Sent Email')
+            console.log(sendPasswordResetEmail(userInfo.email))
+        } else {
+            return toast.warning('Enter a valid email');
+        }
+
+
+
+    }
+    console.log(userInfo.email);
 
     const location = useLocation();
     const navigate = useNavigate();
 
     let from = location.state?.from?.pathname || "/";
 
-    if (loginUser || googleUser) {
-        navigate(from, { replace: true });
-    }
+
+    useEffect(() => {
+        if (loginUser || googleUser) {
+            navigate(from, { replace: true });
+        }
+    }, [from, navigate, loginUser, googleUser])
+
 
     // console.log(userInfo)
     const handleSubmit = event => {
@@ -97,8 +123,10 @@ const Login = () => {
                                 </label>
                                 <input type="password" placeholder="Password" className="input input-bordered font-bold" onChange={handlePasswordChange} required />
                                 <label className="label">
-                                    <a href="g#" className="label-text-alt link link-hover font-bold">Forgot password?</a>
+                                    <Link to='' className="label-text-alt link link-hover font-bold" onClick={handlePasswordResetClick}>Forgot password?</Link>
                                 </label>
+                                <p className='text-red-600 font-bold'>{resetError && resetError.message}</p>
+                                {resetSending && <p>Loading...</p>}
                             </div>
 
 

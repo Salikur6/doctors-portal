@@ -1,11 +1,12 @@
 import { format } from 'date-fns';
 import React from 'react';
 import { toast } from 'react-toastify';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
     const { _id, name, slots } = treatment;
-
-
+    const [user] = useAuthState(auth);
 
 
     const handleSubmit = (event) => {
@@ -27,7 +28,7 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                toast('Booking Done')
+                toast.success('Booking Done')
             })
 
 
@@ -48,13 +49,17 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
                         <input type="text" disabled value={format(date || new Date(), 'PP')} className="font-bold input input-bordered w-full max-w-xs" />
 
                         <select name='slot' className="font-bold select select-bordered w-full max-w-xs">
-                            {slots.map(slot => <option key={slot?._id} value={slot}>{slot}</option>)}
+                            {slots.map((slot, index) => <option
+                                key={index}
+                                value={slot}
+
+                            >{slot}</option>)}
                         </select>
 
-                        <input type="text" name='name' placeholder="Full Name" className="font-bold input input-bordered w-full max-w-xs" />
+                        <input type="text" name='name' disabled value={user?.displayName} className="font-bold input input-bordered w-full max-w-xs" />
 
 
-                        <input type="email" name='email' placeholder="Email" className="font-bold input input-bordered w-full max-w-xs" />
+                        <input type="email" name='email' disabled value={user?.email} className="font-bold input input-bordered w-full max-w-xs" />
 
 
                         <input type="number" name='phone' placeholder="Phone Number" className="font-bold input input-bordered w-full max-w-xs" />

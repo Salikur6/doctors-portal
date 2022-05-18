@@ -133,9 +133,7 @@ const Signup = () => {
                                     <span className="label-text font-bold">Password</span>
                                 </label>
                                 <input type="password" placeholder="Password" className="input input-bordered font-bold" onChange={handlePasswordChange} required />
-                                <label className="label">
-                                    <a href="g#" className="label-text-alt link link-hover font-bold">Forgot password?</a>
-                                </label>
+
                             </div>
 
 

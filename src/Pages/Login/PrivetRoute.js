@@ -7,7 +7,7 @@ import Loading from '../Shared/Loading';
 const PrivetRoute = ({ children }) => {
     const [user, loading] = useAuthState(auth);
     const location = useLocation();
-    console.log(user)
+    // console.log(user)
 
     if (loading) {
         return <Loading></Loading>
