@@ -4,37 +4,47 @@ import { toast } from 'react-toastify';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
 
-const BookingModal = ({ treatment, date, setTreatment }) => {
+const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
     const { _id, name, slots } = treatment;
     const [user] = useAuthState(auth);
+    // console.log(treatment)
 
+    const bookingDate = format(date || new Date(), 'PP')
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const slot = event.target.slot.value;
-        const fullName = event.target.name.value;
+        const patientName = event.target.name.value;
         const email = event.target.email.value;
         const phone = event.target.phone.value;
-        console.log({ _id, name, slot, fullName, email, phone });
+        const treatmentId = _id;
+        // console.log({ _id, treatmentName: name, slot, patientName, email, phone, bookingDate });
 
 
-        fetch('http://localhost:5000/service', {
+        fetch('http://localhost:5000/booking', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ date, slot, fullName, email, phone }),
+            body: JSON.stringify({ treatmentName: name, treatmentId, bookingDate, slot, patientName, email, phone }),
         })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-                toast.success('Booking Done')
+                console.log(data.success)
+                if (data.success) {
+                    toast.success(`appointment is set ${bookingDate} at ${slot}`)
+                } else {
+                    toast.error(`already have an appointment on ${data.data?.bookingDate} at ${data.data?.slot}`)
+
+                }
+                refetch()
+                setTreatment(null)
             })
 
 
 
         //////
-        setTreatment(null)
     }
     return (
         <div>

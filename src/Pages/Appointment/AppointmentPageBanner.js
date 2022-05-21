@@ -14,7 +14,6 @@ const AppointmentPageBanner = ({ date, setDate }) => {
                     <div>
                         <style>{`.rdp-head_cell { color: red }`}</style>
                         <DayPicker
-
                             mode='single'
                             selected={date}
                             onSelect={setDate}

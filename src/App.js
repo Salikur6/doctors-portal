@@ -11,6 +11,9 @@ import Navbar from './Pages/Shared/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
 import Signup from './Pages/Login/Signup';
 import PrivetRoute from './Pages/Login/PrivetRoute';
+import Dashboard from './Pages/Dashboard/Dashboard';
+import MyAppointment from './Pages/Dashboard/MyAppointment';
+import MyReview from './Pages/Dashboard/MyReview';
 
 function App() {
   return (
@@ -25,6 +28,14 @@ function App() {
             <Appointment></Appointment>
           </PrivetRoute>
         }></Route>
+        <Route path='/dashboard' element={
+          <PrivetRoute>
+            <Dashboard></Dashboard>
+          </PrivetRoute>
+        }>
+          <Route index element={<MyAppointment></MyAppointment>}></Route>
+          <Route path='review' element={<MyReview></MyReview>}></Route>
+        </Route>
         <Route path='/reviews' element={<Reviews></Reviews>}></Route>
         <Route path='/contactus' element={<ContactUs></ContactUs>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
