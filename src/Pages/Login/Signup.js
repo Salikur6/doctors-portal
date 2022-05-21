@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState, useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
+import useToken from '../../Hooks/useToken';
 import Loading from '../Shared/Loading'
 
 const Signup = () => {
-    const [user] = useAuthState(auth)
     const navigate = useNavigate()
-    console.log(user)
+    // console.log(user)
 
     const [signInWithGoogle, googleUser, GoogleLoading, GoogleError] = useSignInWithGoogle(auth);
 
@@ -81,6 +81,7 @@ const Signup = () => {
 
 
 
+    const [token] = useToken(createUser || googleUser)
 
     // console.log(userInfo)
     const handleSubmit = async (event) => {
@@ -96,10 +97,10 @@ const Signup = () => {
     }
 
     useEffect(() => {
-        if (createUser || googleUser) {
+        if (token) {
             navigate('/appointment')
         }
-    }, [createUser, googleUser, navigate])
+    }, [token, navigate])
 
 
     if (GoogleLoading || createLoading || profileUpdating) {

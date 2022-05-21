@@ -3,6 +3,7 @@ import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWith
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
+import useToken from '../../Hooks/useToken';
 import Loading from '../Shared/Loading'
 
 const Login = () => {
@@ -80,12 +81,13 @@ const Login = () => {
 
     let from = location.state?.from?.pathname || "/";
 
+    const [token] = useToken(loginUser || googleUser);
 
     useEffect(() => {
-        if (loginUser || googleUser) {
+        if (token) {
             navigate(from, { replace: true });
         }
-    }, [from, navigate, loginUser, googleUser])
+    }, [from, navigate, token])
 
 
     // console.log(userInfo)
