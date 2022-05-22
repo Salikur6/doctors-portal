@@ -5,7 +5,7 @@ import Loading from '../Shared/Loading';
 
 const AllUsers = () => {
 
-    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('http://localhost:5000/users', {
+    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('https://ancient-ravine-10764.herokuapp.com/users', {
         method: 'GET',
         headers: {
             'authorization': `Bearer ${localStorage.getItem('access-token')}`
@@ -18,7 +18,7 @@ const AllUsers = () => {
 
     console.log(users)
     const handleAdmin = (email, refetch) => {
-        fetch(`http://localhost:5000/user/admin/${email}`, {
+        fetch(`https://ancient-ravine-10764.herokuapp.com/user/admin/${email}`, {
             method: 'PUT',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('access-token')}`

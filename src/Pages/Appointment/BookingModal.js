@@ -21,7 +21,7 @@ const BookingModal = ({ treatment, date, setTreatment, refetch }) => {
         // console.log({ _id, treatmentName: name, slot, patientName, email, phone, bookingDate });
 
 
-        fetch('http://localhost:5000/booking', {
+        fetch('https://ancient-ravine-10764.herokuapp.com/booking', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
